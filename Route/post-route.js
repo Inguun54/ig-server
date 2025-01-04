@@ -56,10 +56,7 @@ postRoute.get("/posts", authMiddleWare, async (req, res) => {
 postRoute.get("/post", authMiddleWare, async (req, res) => {
   const posts = await postModel
     .find()
-    .populate("userId", "email username _id")
-    .populate({
-      path: "likes",
-    });
+    .populate("userId", "email username _id profileImage");
 
   return res.json({ posts });
 });
