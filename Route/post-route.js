@@ -44,11 +44,9 @@ postRoute.get("/posts", authMiddleWare, async (req, res) => {
   const authHeader = req.headers("authorization");
   if (!token) res.json({ message: "no token in header" });
   const token = authHeader.split(" ")[1];
-  console.log(token);
+
   try {
-    const posts = await postModel
-      .find()
-      .populate("userId", "email username profileImage _id");
+    const posts = await postModel.find().populate("userId");
     res.json(posts);
   } catch (error) {
     res.status(404).json({ message: `failed to get posts, ${error}` });
@@ -61,10 +59,6 @@ postRoute.get("/post", authMiddleWare, async (req, res) => {
     .populate("userId", "email username _id")
     .populate({
       path: "likes",
-      populate: {
-        path: "userId",
-        select: "username profileImage",
-      },
     });
 
   return res.json({ posts });
