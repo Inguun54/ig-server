@@ -21,7 +21,7 @@ likeRoute.post("/pressUnlike", authMiddleWare, async (req, res) => {
   const { postId, userId } = req.body;
   try {
     const unlikedPostResponse = await postModel.findByIdAndUpdate(postId, {
-      $pull: { likes: userId },
+      $addToSet: { likes: userId },
     });
     res.status(200).json({ message: userId + " unliked post" });
   } catch (error) {
