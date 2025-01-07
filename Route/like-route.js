@@ -7,9 +7,9 @@ const likeRoute = Route();
 likeRoute.post("/pressLike", authMiddleWare, async (req, res) => {
   const { postId, userId } = req.body;
   try {
-    // const likedPostResponse = await postModel.findByIdAndUpdate(postId, {
-    //   $addToSet: { likes: userId },
-    // });
+    const likedPostResponse = await postModel.findByIdAndUpdate(postId, {
+      $push: { likes: userId },
+    });
     res.status(200).json({ message: userId + "liked post" });
   } catch (error) {
     console.error(error);
