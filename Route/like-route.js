@@ -17,4 +17,17 @@ likeRoute.post("/pressLike", authMiddleWare, async (req, res) => {
   }
 });
 
+likeRoute.post("/pressUnlike", authMiddleWare, async (req, res) => {
+  const { postId, userId } = req.body;
+  try {
+    const unlikedPostResponse = await postModel.findByIdAndUpdate(postId, {
+      $pull: { likes: userId },
+    });
+    res.status(200).json({ message: userId + " unliked post" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Something went wrong");
+  }
+});
+
 module.exports = likeRoute;
