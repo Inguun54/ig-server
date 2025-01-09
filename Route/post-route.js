@@ -7,13 +7,17 @@ const postRoute = Route();
 
 postRoute.post("/writeComment", authMiddleWare, async (req, res) => {
   try {
-    const { comment, postId, userId } = req.body;
+    const { comment, postId, userId, username } = req.body;
 
-    const respond = await commentModel.create({
+    const { _id } = await commentModel.create({
       comment,
       postId,
       userId,
+      username,
     });
+
+    const respond = await commentModel.findById(_id).populate("userId");
+
     res.status(200).json(respond);
   } catch (error) {
     console.log(error);

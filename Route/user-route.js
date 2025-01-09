@@ -64,7 +64,7 @@ userRoute.get("/user/posts", authMiddleWare, async (req, res) => {
   try {
     const posts = await userModel
       .find()
-      .populate("posts", "email username _id");
+      .populate("posts", "email username _id ");
 
     res.status(200).json(posts);
   } catch (error) {
