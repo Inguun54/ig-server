@@ -90,4 +90,13 @@ userRoute.post("/user/follow", authMiddleWare, async (req, res) => {
   }
 });
 
+userRoute.get("/user/profile", authMiddleWare, async (req, res) => {
+  try {
+    const user = await userModel.findById(req.user.userId);
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting user profile", error });
+  }
+});
 module.exports = userRoute;
