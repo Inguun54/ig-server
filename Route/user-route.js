@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userModel = require("../Module/user-schema");
 const authMiddleWare = require("../auth-middle-ware");
+const postModel = require("../Module/post-schema");
 const userRoute = Route();
 
 userRoute.post("/signup", async (req, res) => {
@@ -95,8 +96,9 @@ userRoute.get("/user/profile/:userId", authMiddleWare, async (req, res) => {
 
   try {
     const user = await userModel.findById(userId);
+    const userPosts = await postModel.find({ userId });
 
-    res.status(200).json(user);
+    res.status(200).json({ user, userPosts });
   } catch (error) {
     res.status(500).json({ message: "Error getting user profile", error });
   }
