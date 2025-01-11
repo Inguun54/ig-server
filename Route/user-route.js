@@ -90,9 +90,11 @@ userRoute.post("/user/follow", authMiddleWare, async (req, res) => {
   }
 });
 
-userRoute.get("/user/profile", authMiddleWare, async (req, res) => {
+userRoute.get("/user/profile/:userId", authMiddleWare, async (req, res) => {
+  const { userId } = req.params;
+
   try {
-    const user = await userModel.findById(req.user.userId);
+    const user = await userModel.findById(userId);
 
     res.status(200).json(user);
   } catch (error) {
