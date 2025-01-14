@@ -75,15 +75,17 @@ userRoute.get("/user/posts", authMiddleWare, async (req, res) => {
 
 userRoute.post("/user/follow", authMiddleWare, async (req, res) => {
   try {
-    const { followingUserId, followedUserId } = req.body;
+    const userId = req.user.userId;
+    const { followedUserId } = req.body;
 
-    await userModel.findByIdAndUpdate(followingUserId, {
+    await userModel.findByIdAndUpdate(userId, {
       $addToSet: { following: followedUserId },
     });
-
+    //following the user process
     await userModel.findByIdAndUpdate(followedUserId, {
-      $addToSet: { followers: followingUserId },
+      $addToSet: { followers: userId },
     });
+    //checking the follower process
 
     res.status(200).json({ message: "Follow successful" });
   } catch (error) {
@@ -104,7 +106,7 @@ userRoute.get("/user/profile/:userId", authMiddleWare, async (req, res) => {
   }
 });
 
-userRoute.get("/getUsers", authMiddleWare, async (req, res) => {
+userRoute.get("/getFollowedUsers", authMiddleWare, async (req, res) => {
   const users = await userModel.find();
 
   const filteredUsers = users.filter((user) => {
