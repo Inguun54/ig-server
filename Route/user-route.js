@@ -103,4 +103,14 @@ userRoute.get("/user/profile/:userId", authMiddleWare, async (req, res) => {
     res.status(500).json({ message: "Error getting user profile", error });
   }
 });
+
+userRoute.get("/getUsers", authMiddleWare, async (req, res) => {
+  const users = await userModel.find();
+
+  const filteredUsers = users.filter((user) => {
+    return user._id !== req.user.userId;
+  });
+
+  return res.json({ user: filteredUsers });
+});
 module.exports = userRoute;
