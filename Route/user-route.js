@@ -78,14 +78,14 @@ userRoute.post("/user/follow", authMiddleWare, async (req, res) => {
     const userId = req.user.userId;
     const { followedUserId } = req.body;
 
+    //following the user process
     await userModel.findByIdAndUpdate(userId, {
       $addToSet: { following: followedUserId },
     });
-    //following the user process
+    //checking the follower process
     await userModel.findByIdAndUpdate(followedUserId, {
       $addToSet: { followers: userId },
     });
-    //checking the follower process
 
     res.status(200).json({ message: "Follow successful" });
   } catch (error) {
