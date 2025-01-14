@@ -93,6 +93,25 @@ userRoute.post("/user/follow", authMiddleWare, async (req, res) => {
   }
 });
 
+userRoute.post("/user/unfollow", authMiddleWare, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { followedUserId } = req.body;
+
+    await userModel.findByIdAndUpdate(userId, {
+      $pull: { following: followedUserId },
+    });
+
+    await userModel.findByIdAndUpdate(followedUserId, {
+      $pull: { followers: userId },
+    });
+
+    res.status(200).json({ message: "unfollow successful" });
+  } catch (error) {
+    res.status(500).json({ message: "Error unfollowing user", error });
+  }
+});
+
 userRoute.get("/user/profile/:userId", authMiddleWare, async (req, res) => {
   const { userId } = req.params;
 
